@@ -3,9 +3,7 @@
 ## Project
 
 ### This repository is about:
-1. Create Posts
-2. Post Management: you can create Post, delete it and also updated it
-3. Authentication: Sign Up and Login 
+1. 
 
 
 ### Install
