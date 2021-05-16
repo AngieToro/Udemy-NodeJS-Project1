@@ -1,7 +1,7 @@
-const path = require('path');
-const rootDir = require('../util/path');
+//const path = require('path');
+//const rootDir = require('../util/path');
+const Product = require('../models/products');
 
-const products = [];
 
 exports.getAddProduct = (req, res, next) => {
 
@@ -20,8 +20,10 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct =  (req, res, next) => {
  
-    console.log(req.body);
-    products.push({title: req.body.title});
+    //console.log(req.body);
+    //products.push({title: req.body.title});
+    const product = new Product(req.body.title);
+    product.save();
     res.redirect("/");
     
 };
@@ -34,13 +36,17 @@ exports.getProducts = (req, res, next) => {
     //res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     //res.render('shop'); //render the template engine located in views folder
     //res.render('shop', {prods: products, docTitle: 'Shop', path: "/"}); //pug
-    res.render('shop', 
+    
+    Product.fetchAll(products => {
+
+        res.render('shop', 
                 {
                     prods: products, 
                     docTitle: 'Shop', 
                     path: "/", 
-                    hasProducst: products.length > 0,
-                    activeShop: true,
-                    productCSS: true
-                }); //handlebars
-}
+                    hasProducst: products.length > 0,   //handlebars
+                    activeShop: true,                   //handlebars
+                    productCSS: true                    //handlebars
+                }); 
+    });
+};
