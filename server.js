@@ -1,13 +1,19 @@
 const express = require('express');
 const boydParser = require('body-parser');
 const path = require('path');
+//const expressHbs = require('express-handlebars');
 
-const dataAdmin = require('./routes/admin');
-const routerShop = require('./routes/shop');
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+const errorController = require('./controllers/error');
 
 const appExpress = express();
 
-appExpress.set('view engine', 'pug'); //template engine type of pug
+
+//appExpress.set('view engine', 'pug'); //template engine type of pug
+//appExpress.engine('hbs',expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout', extname: 'hbs'})); //template engine type of handlebars
+//appExpress.set('view engine', 'hbs');
+appExpress.set('view engine', 'ejs'); //template engine type of EJS
 appExpress.set('views','views'); //the firts parameter is the folder default, the second parameters is where the html files are in the proyect 
 
 
@@ -18,14 +24,8 @@ appExpress.use(express.static(path.join(__dirname, 'public'))); //access to the 
 //middleware proyect
 /* appExpress.use('/',(req, res, next) => {}); */
 
-appExpress.use('/admin', dataAdmin.routers);
-appExpress.use(routerShop);
-
-appExpress.use('/', (req, res, next) => {
-
-    //res.status(404).sendFile(path.join(__dirname, 'views', 'errorPage.html'));
-    res.status(404).render('errorPage', {docTitle: 'Page Not Found'});
-
-});
+appExpress.use('/admin', adminRoutes);
+appExpress.use(shopRoutes);
+appExpress.use(errorController.get404Error);
 
 appExpress.listen(3000);
