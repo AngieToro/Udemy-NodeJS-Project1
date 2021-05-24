@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const rootDir = require('../util/path');
 
 //const products = [];
 const pathFolder = path.join(path.dirname(require.main.filename), 'data', 'products.json');
@@ -23,14 +22,19 @@ const getProductsFromFile = cb => {
 
 module.exports = class Product {
 
-    constructor(titleProduct) {
-        this.title = titleProduct
+    constructor(titleProduct, imageUrl, description, price) {
+        this.title = titleProduct;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.price = price;
     };
 
     save(){
 
         //products.push(this);
 
+        this.id = Math.random().toString();
+        
         getProductsFromFile(products => {
 
             products.push(this);
@@ -43,11 +47,21 @@ module.exports = class Product {
         });
     };
 
-    static fetchAll(cb){
+    static fetchAllProducts(cb){
         //the cb (callback) is for the function return something because the code is async 
 
         getProductsFromFile(cb);
 
         //return products;
+    };
+
+    static findProductById(id, cb){
+
+        getProductsFromFile(products => {
+
+            const product = products.find(p => p.id === id);
+            cb(product);
+
+        });
     };
 };
