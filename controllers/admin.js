@@ -1,29 +1,18 @@
-//const path = require('path');
-//const rootDir = require('../util/path');
 const Product = require('../models/products');
 
 
 exports.getAddProduct = (req, res, next) => {
 
-    //res.sendFile(path.join(__dirname, '..', 'views', 'add-product.html'));
-    //res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-    //res.render('add-product',{docTitle: 'Add Product', path: '/admin/add-product'}); //pug
-    //res.render('admin/add-product',
     res.render('admin/edit-product',
                 {
                     docTitle: 'Add Product', 
                     path: '/admin/add-product',
                     editing: false
-                    //formsCSS: true,           //handlebars
-                    //productCSS: true,         //handlebars
-                    //activeAddProduct: true    //handlebars
                 });
 };
 
 exports.postAddProduct =  (req, res, next) => {
  
-    //console.log(req.body);
-    //products.push({title: req.body.title});
     const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
@@ -81,9 +70,6 @@ exports.getProducts = (req, res, next) => {
                     prods: products, 
                     docTitle: 'Admin Products', 
                     path: "/admin/products"
-                    //hasProducst: products.length > 0,   //handlebars
-                    //activeShop: true,                   //handlebars
-                    //productCSS: true                    //handlebars
                 }); 
     });
 

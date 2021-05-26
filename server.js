@@ -1,7 +1,6 @@
 const express = require('express');
 const boydParser = require('body-parser');
 const path = require('path');
-//const expressHbs = require('express-handlebars');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -9,11 +8,8 @@ const errorController = require('./controllers/error');
 
 const appExpress = express();
 
-
-//appExpress.set('view engine', 'pug'); //template engine type of pug
-//appExpress.engine('hbs',expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout', extname: 'hbs'})); //template engine type of handlebars
-//appExpress.set('view engine', 'hbs');
-appExpress.set('view engine', 'ejs'); //template engine type of EJS
+//template engine type of EJS
+appExpress.set('view engine', 'ejs'); 
 appExpress.set('views','views'); //the firts parameter is the folder default, the second parameters is where the html files are in the proyect 
 
 
@@ -21,9 +17,7 @@ appExpress.set('views','views'); //the firts parameter is the folder default, th
 appExpress.use(boydParser.urlencoded({extended: false}));
 appExpress.use(express.static(path.join(__dirname, 'public'))); //access to the public folder 
 
-//middleware proyect
-/* appExpress.use('/',(req, res, next) => {}); */
-
+//middleware project
 appExpress.use('/admin', adminRoutes);
 appExpress.use(shopRoutes);
 appExpress.use(errorController.get404Error);

@@ -2,13 +2,6 @@ const Product = require('../models/products');
 const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
-
-    //res.sendFile(path.join(__dirname, '..', 'views', 'shop.html'));
-    //console.log(path.join(rootDir, 'views', 'shop.html'));
-
-    //res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    //res.render('shop'); //render the template engine located in views folder
-    //res.render('shop', {prods: products, docTitle: 'Shop', path: "/"}); //pug
     
     Product.fetchAllProducts(products => {
 
@@ -17,9 +10,6 @@ exports.getProducts = (req, res, next) => {
                     prods: products, 
                     docTitle: 'All Products', 
                     path: "/procuts"
-                    //hasProducst: products.length > 0,   //handlebars
-                    //activeShop: true,                   //handlebars
-                    //productCSS: true                    //handlebars
                 }); 
     });
 };
@@ -47,9 +37,6 @@ exports.getIndex = (req, res, next) => {
                     prods: products, 
                     docTitle: 'Shop', 
                     path: "/"
-                    //hasProducst: products.length > 0,   //handlebars
-                    //activeShop: true,                   //handlebars
-                    //productCSS: true                    //handlebars
                 }); 
     });
 };
@@ -83,7 +70,6 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
 
     const prodId = req.body.productId;  //name input on the body 
-    console.log("product ID cart= ", prodId);
     Product.findProductById(prodId, (product) => {
         Cart.addProudctCart(prodId, product.price);
     });
@@ -105,5 +91,16 @@ exports.getOrders = (req, res, next) => {
     {
         docTitle: 'Your orders',
         path: '/orders'
+    });
+};
+
+exports.postDeleteProductCart = (req, res, next) => {
+
+    const prodId = req.body.productId;
+
+    Product.findProductById(prodId, product => {
+
+        Cart.deleteProductCart(prodId, product.price);
+        res.redirect('/cart');
     });
 };

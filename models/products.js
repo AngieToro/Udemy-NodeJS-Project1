@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const Cart = require('./cart');
 
-//const products = [];
 const pathFolder = path.join(path.dirname(require.main.filename), 'data', 'products.json');
 
 const getProductsFromFile = cb => {
@@ -32,17 +31,13 @@ module.exports = class Product {
 
     save(){
 
-        //products.push(this);
-        
         getProductsFromFile(products => {
 
             if (this.id){
 
                 const existingProductIndex = products.findIndex(prod => prod.id === this.id);
                 const updateProducts = [...products];
-                console.log("updateProducts old= ", updateProducts);
                 updateProducts[existingProductIndex] = this;
-                console.log("updateProducts new= ", updateProducts);
 
                 fs.writeFile(pathFolder, JSON.stringify(updateProducts), (err) => {
 
@@ -53,7 +48,6 @@ module.exports = class Product {
 
                 this.id = Math.random().toString();
                 products.push(this);
-                console.log("Product to add= ", this);
 
                 fs.writeFile(pathFolder, JSON.stringify(products), (err) => {
     
@@ -87,10 +81,7 @@ module.exports = class Product {
 
     static fetchAllProducts(cb){
         //the cb (callback) is for the function return something because the code is async 
-
         getProductsFromFile(cb);
-
-        //return products;
     };
 
     static findProductById(id, cb){
