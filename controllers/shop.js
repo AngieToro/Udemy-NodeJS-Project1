@@ -29,7 +29,6 @@ exports.getProduct = (req, res, next) => {
     const prodId = req.params.productId;
     Product.findProductById(prodId, product => {
 
-        console.log("product id= ", product);
         res.render('shop/product-detail', 
                     {
                         product: product,
@@ -57,10 +56,27 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
 
-    res.render('shop/cart', 
-    {
-        docTitle: 'Your cart',
-        path: '/cart'
+    Cart.getProductsCart(cart => {
+        Product.fetchAllProducts(products => {
+
+            const cartProducts = [];
+            for (product of products){
+
+                const cartProductData = cart.products.find(prod => prod.id === product.id);
+
+                if (cartProductData){
+
+                    cartProducts.push({ productData: product, quantity: cartProductData.quantity });
+                };
+            };
+
+            res.render('shop/cart', 
+            {
+                docTitle: 'Your cart',
+                path: '/cart',
+                products: cartProducts
+            });
+        });
     });
 };
 
@@ -69,7 +85,7 @@ exports.postCart = (req, res, next) => {
     const prodId = req.body.productId;  //name input on the body 
     console.log("product ID cart= ", prodId);
     Product.findProductById(prodId, (product) => {
-        Cart.addProudct(prodId, product.price);
+        Cart.addProudctCart(prodId, product.price);
     });
     res.redirect('/cart');
 };

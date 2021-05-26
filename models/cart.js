@@ -5,7 +5,7 @@ const pathFolder = path.join(path.dirname(require.main.filename), 'data', 'cart.
 
 module.exports = class Cart {
 
-    static addProudct (id, productPrice){
+    static addProudctCart (id, productPrice){
 
         //Fetch the previous cart
         fs.readFile(pathFolder, (err, fileContent) => {
@@ -36,10 +36,51 @@ module.exports = class Cart {
             };
 
             cart.totalPrice = cart.totalPrice + +productPrice;
+            
+            console.log("Cart= ", cart);
+
             fs.writeFile(pathFolder, JSON.stringify(cart), err => {
 
-                console.log("Error carrt= ", err);
+                console.log("Error add product cart= ", err);
             });
+        });
+    };
+
+    static deleteProductCart(id, productPrice){
+
+        fs.readFile(pathFolder, (err, fileContent) => {
+
+            if (err) {
+                return;
+            };
+
+            const updatedCart = {...JSON.parse(fileContent)};
+            const product = updatedCart.products.find(prod => prod.id === id);
+            console.log("producto cart= ", product);
+            const productQuantity = product.quantity;
+            updatedCart.products = updatedCart.products.filter(prod => prod.id !== id);
+            updatedCart.totalPrice = updatedCart.totalPrice - productPrice * productQuantity;
+            console.log("total price= ",  updatedCart.totalPrice);
+
+            fs.writeFile(pathFolder, JSON.stringify(updatedCart), err => {
+
+                console.log("Error delete product cart= ", err);
+            });
+        });
+    };
+
+    static getProductsCart(cb) {
+
+        fs.readFile(pathFolder, (err, fileContent) => {
+        
+            const cart= JSON.parse(fileContent);
+            
+            if (err){
+                cb(null);
+            
+            } else {
+                cb(cart);
+            }
         });
     };
 };
